@@ -1,19 +1,16 @@
-﻿using System;
-
-namespace Blackjack
+﻿namespace Blackjack
 {
     internal class Card
     {
-        public Card()
-        {
-            int Value = 
-            enum Rank {
-                Ace, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, J, Q, K
-            }
+        public string Suit;
+        public string Rank;
+        public int Value;
 
-            enum Suit{
-                Hearts, Diamonds, Club, Spades
-            }
+        public Card(string suit, string rank, int value)
+        {
+            Suit = suit;
+            Rank = rank;
+            Value = value;
         }
     }
 }
