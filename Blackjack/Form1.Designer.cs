@@ -1,15 +1,14 @@
-﻿namespace Blackjack
+﻿using System;
+using System.Drawing;
+using System.Windows.Forms;
+
+namespace Blackjack
 {
     partial class Form1
     {
-        /// <summary>
-        ///  Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        ///  Clean up any resources being used.
-        /// </summary>
+        
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
@@ -22,77 +21,85 @@
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        ///  Required method for Designer support - do not modify
-        ///  the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
-            txtName = new Button();
-            lstNames = new ListBox();
-            textBox1 = new TextBox();
-            Names = new Label();
-            SuspendLayout();
+            this.txtLog = new TextBox();
+            this.btnHit = new Button();
+            this.btnStand = new Button();
+            this.btnNew = new Button();
+            this.SuspendLayout();
             // 
-            // txtName
+            // txtLog
             // 
-            txtName.Location = new Point(201, 99);
-            txtName.Name = "txtName";
-            txtName.Size = new Size(94, 29);
-            txtName.TabIndex = 0;
-            txtName.Text = "Add Name";
-            txtName.UseVisualStyleBackColor = true;
-            txtName.Click += button1_Click;
+            this.txtLog.Location = new Point(12, 12);
+            this.txtLog.Multiline = true;
+            this.txtLog.ScrollBars = ScrollBars.Vertical;
+            this.txtLog.ReadOnly = true;
+            this.txtLog.Name = "txtLog";
+            this.txtLog.Size = new Size(736, 330);
+            this.txtLog.TabIndex = 0;
+            this.txtLog.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+            // 
+            // btnHit
+            // 
+            this.btnHit.Location = new Point(12, 360);
+            this.btnHit.Name = "btnHit";
+            this.btnHit.Size = new Size(240, 60);
+            this.btnHit.TabIndex = 1;
+            this.btnHit.Text = "Hit (Dealer)";
+            this.btnHit.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            this.btnHit.Font = new Font(this.btnHit.Font.FontFamily, 12);
+            this.btnHit.UseVisualStyleBackColor = true;
+            this.btnHit.Click += btnHit_Click;
+            // 
+            // btnStand
+            // 
+            this.btnStand.Location = new Point(262, 360);
+            this.btnStand.Name = "btnStand";
+            this.btnStand.Size = new Size(240, 60);
+            this.btnStand.TabIndex = 2;
+            this.btnStand.Text = "Stand (Dealer)";
+            this.btnStand.Anchor = AnchorStyles.Bottom;
+            this.btnStand.Font = new Font(this.btnStand.Font.FontFamily, 12);
+            this.btnStand.UseVisualStyleBackColor = true;
+            this.btnStand.Click += btnStand_Click;
+            // 
+            // btnNew
+            // 
+            this.btnNew.Location = new Point(512, 360);
+            this.btnNew.Name = "btnNew";
+            this.btnNew.Size = new Size(236, 60);
+            this.btnNew.TabIndex = 3;
+            this.btnNew.Text = "New Game";
+            this.btnNew.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            this.btnNew.Font = new Font(this.btnNew.Font.FontFamily, 12);
+            this.btnNew.UseVisualStyleBackColor = true;
+            this.btnNew.Click += btnNew_Click;
             // 
             // lstNames
             // 
-            lstNames.FormattingEnabled = true;
-            lstNames.Location = new Point(12, 27);
-            lstNames.Name = "lstNames";
-            lstNames.Size = new Size(120, 84);
-            lstNames.TabIndex = 2;
-            // 
-            // textBox1
-            // 
-            textBox1.Location = new Point(331, 46);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(100, 27);
-            textBox1.TabIndex = 3;
-            textBox1.TextChanged += textBox1_TextChanged;
-            // 
-            // Names
-            // 
-            Names.AutoSize = true;
-            Names.Location = new Point(12, 9);
-            Names.Name = "Names";
-            Names.Size = new Size(55, 20);
-            Names.TabIndex = 4;
-            Names.Text = "Names";
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
-            Controls.Add(Names);
-            Controls.Add(textBox1);
-            Controls.Add(lstNames);
-            Controls.Add(txtName);
-            Name = "Form1";
-            Text = "Form1";
-            ResumeLayout(false);
-            PerformLayout();
+            this.AutoScaleDimensions = new SizeF(8F, 20F);
+            this.AutoScaleMode = AutoScaleMode.Font;
+            this.ClientSize = new Size(760, 440);
+            this.Controls.Add(this.btnNew);
+            this.Controls.Add(this.btnStand);
+            this.Controls.Add(this.btnHit);
+            this.Controls.Add(this.txtLog);
+            this.Name = "Form1";
+            this.Text = "Blackjack";
+            // 
+            this.ResumeLayout(false);
+            this.PerformLayout();
         }
 
         #endregion
 
-        private Button txtName;
-
-        public Label Names { get; private set; }
-
-        private Label label1;
-        private ListBox lstNames;
-        private TextBox textBox1;
-        private Label Names;
+        private TextBox txtLog;
+        private Button btnHit;
+        private Button btnStand;
+        private Button btnNew;
     }
 }
