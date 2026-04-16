@@ -17,11 +17,12 @@ namespace Blackjack
             {
                 foreach (string r in ranks)
                 {
-                    int val = 10;
-                    if (int.TryParse(r, out int n)) val = n;
+                    int val;
                     if (r == "ace") val = 11;
+                    else if (r == "jack" || r == "queen" || r == "king") val = 10;
+                    else val = int.Parse(r);
 
-                    cards.Add(new Card(r, s, val, r + "_of_" + s + ".png"));
+                    cards.Add(new Card(r, s, val));
                 }
             }
         }
@@ -39,9 +40,9 @@ namespace Blackjack
 
         public Card Draw()
         {
-            Card c = cards[0];
+            Card kaart = cards[0];
             cards.RemoveAt(0);
-            return c;
+            return kaart;
         }
     }
 }

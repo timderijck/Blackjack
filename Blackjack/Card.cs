@@ -3,16 +3,15 @@
     internal class Card
     {
         public string Rank;
-        public string Suit;
         public int Value;
         public string ImageFile;
 
-        public Card(string rank, string suit, int value, string imageFile)
+        public Card(string rank, string suit, int value)
         {
             Rank = rank;
-            Suit = suit;
             Value = value;
-            ImageFile = imageFile;
+            // Maakt automatisch de bestandsnaam: bijv. "ace_of_hearts.png"
+            ImageFile = rank + "_of_" + suit + ".png";
         }
     }
 }
