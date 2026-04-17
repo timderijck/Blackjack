@@ -87,7 +87,7 @@ namespace Blackjack
             // hier wordt gekeken of de dealer over de 21 is
             if (BerekenScore(dealerHand) > 21)
             {
-                MessageBox.Show("Je bent bust! De speler wint.");
+                MessageBox.Show("Bust!");
                 StartNewGame();
             }
         }
@@ -106,7 +106,7 @@ namespace Blackjack
             }
             else if (scoreSpeler > scoreDealer)
             {
-                MessageBox.Show(bericht + "De speler wint!");
+                MessageBox.Show(bericht + "Helaas! Je hebt verloren.");
             }
             else
             {
