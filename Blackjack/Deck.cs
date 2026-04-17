@@ -10,28 +10,29 @@ namespace Blackjack
 
         public Deck()
         {
+            // hier worden 4 decks aan de lijst toegevoegd (de shoe)
             string[] suits = { "hearts", "diamonds", "clubs", "spades" };
             string[] ranks = { "ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king" };
 
-            foreach (string s in suits)
+            for (int i = 0; i < 4; i++)
             {
-                foreach (string r in ranks)
+                foreach (string s in suits)
                 {
-                    int val;
-                    if (r == "ace") val = 11;
-                    else if (r == "jack" || r == "queen" || r == "king") val = 10;
-                    else val = int.Parse(r);
-
-                    cards.Add(new Card(r, s, val));
+                    foreach (string r in ranks)
+                    {
+                        int val = (r == "ace") ? 11 : (r == "jack" || r == "queen" || r == "king") ? 10 : int.Parse(r);
+                        cards.Add(new Card(r, s, val));
+                    }
                 }
             }
         }
 
         public void Shuffle()
         {
-            for (int i = 0; i < cards.Count; i++)
+            // hier worden de kaarten geschud
+            for (int i = cards.Count - 1; i > 0; i--)
             {
-                int j = rnd.Next(cards.Count);
+                int j = rnd.Next(i + 1);
                 Card temp = cards[i];
                 cards[i] = cards[j];
                 cards[j] = temp;
@@ -40,6 +41,8 @@ namespace Blackjack
 
         public Card Draw()
         {
+            // hier wordt de bovenste kaart getrokken
+            if (cards.Count == 0) return null;
             Card kaart = cards[0];
             cards.RemoveAt(0);
             return kaart;
