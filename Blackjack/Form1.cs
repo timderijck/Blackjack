@@ -10,116 +10,120 @@ namespace Blackjack
         private Deck deck;
         private List<Card> playerHand = new List<Card>();
         private List<Card> dealerHand = new List<Card>();
+        private int trainingScore = 0; 
+        private bool isRondeBezig = false;
 
         public Form1()
         {
             InitializeComponent();
-
-            // hier wordt de nieuw spel knop aangezet
-            this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
-
             StartNewGame();
         }
 
         private void StartNewGame()
         {
-            // hier wordt een nieuw deck gemaakt en geschud
-            deck = new Deck();
+            deck = new Deck(4);
             deck.Shuffle();
             playerHand.Clear();
             dealerHand.Clear();
+            isRondeBezig = true;
 
-            // hier worden de eerste kaarten uitgedeeld
+            // Delen: dealer krijgt 1 open, 1 dicht (Must Have)
             playerHand.Add(deck.Draw());
             dealerHand.Add(deck.Draw());
             playerHand.Add(deck.Draw());
             dealerHand.Add(deck.Draw());
 
-            // hier pakt de speler automatisch kaarten tot 17 punten
-            while (BerekenScore(playerHand) < 17)
-            {
-                playerHand.Add(deck.Draw());
-            }
+            // AI Speler stopt automatisch op 17
+            while (BerekenScore(playerHand) < 17) playerHand.Add(deck.Draw());
 
-            ToonScherm();
+            ToonScherm(false);
         }
 
         private int BerekenScore(List<Card> hand)
         {
-            // hier wordt de score van een hand berekend
-            int totaal = 0;
-            int azen = 0;
-            foreach (Card c in hand)
-            {
-                totaal += c.Value;
-                if (c.Rank == "ace") azen++;
-            }
-            // hier wordt de aas van 11 naar 1 gezet bij meer dan 21 punten
-            while (totaal > 21 && azen > 0)
-            {
-                totaal -= 10;
-                azen--;
-            }
+            int totaal = 0, azen = 0;
+            foreach (Card c in hand) { totaal += c.Value; if (c.Rank == "ace") azen++; }
+            while (totaal > 21 && azen > 0) { totaal -= 10; azen--; }
             return totaal;
         }
 
-        private void ToonScherm()
+        private void ToonScherm(bool toonAlles)
         {
-            // hier wordt de tekst in het vak gezet (zonder de score van de speler)
             txtLog.Clear();
-            txtLog.AppendText("De speler heeft zijn kaarten gepakt.\r\n");
-            txtLog.AppendText("Jouw punten: " + BerekenScore(dealerHand) + "\r\n");
-            txtLog.AppendText("\r\nKlik op 'Hit' voor een kaart of 'Stand' om te stoppen.");
+            txtLog.AppendText($"TRAINING SCORE: {trainingScore}\r\n");
+            txtLog.AppendText($"Speler score: {BerekenScore(playerHand)}\r\n");
 
-            // hier worden de plaatjes van de kaarten geladen
+            if (!toonAlles)
+            {
+                txtLog.AppendText($"Jouw zichtbare kaart: {dealerHand[0].Value}\r\n");
+                // Hint (Should Have)
+                txtLog.AppendText(BerekenScore(dealerHand) < 17 ? "HINT: Trek een kaart." : "HINT: Je moet passen.");
+            }
+            else
+            {
+                txtLog.AppendText($"Jouw totale score: {BerekenScore(dealerHand)}\r\n");
+            }
+
+            // Plaatjes
             pbPlayer1.Image = Image.FromFile("Cards/" + playerHand[0].ImageFile);
             pbPlayer2.Image = Image.FromFile("Cards/" + playerHand[1].ImageFile);
             pbDealer1.Image = Image.FromFile("Cards/" + dealerHand[0].ImageFile);
-            pbDealer2.Image = Image.FromFile("Cards/" + dealerHand[1].ImageFile);
+            // Must Have: tweede kaart dealer is dicht
+            pbDealer2.Image = Image.FromFile(toonAlles ? "Cards/" + dealerHand[1].ImageFile : "Cards/back.png");
         }
 
         private void btnHit_Click(object sender, EventArgs e)
         {
-            // hier krijgt de dealer een kaart als hij op hit klikt
-            dealerHand.Add(deck.Draw());
-            ToonScherm();
+            if (!isRondeBezig) return;
 
-            // hier wordt gekeken of de dealer over de 21 is
-            if (BerekenScore(dealerHand) > 21)
+            // Validatie: mag dealer hitten? (Must Have)
+            if (BerekenScore(dealerHand) >= 17)
             {
-                MessageBox.Show("Bust!");
-                StartNewGame();
+                trainingScore -= 10;
+                MessageBox.Show("FOUT! Dealer moet passen op 17+.");
+            }
+            else
+            {
+                trainingScore += 5;
+                dealerHand.Add(deck.Draw());
+                ToonScherm(true);
+                if (BerekenScore(dealerHand) > 21) EindRonde("Bust!");
             }
         }
 
         private void btnStand_Click(object sender, EventArgs e)
         {
-            // hier worden de scores vergeleken als de dealer stopt
-            int scoreSpeler = BerekenScore(playerHand);
-            int scoreDealer = BerekenScore(dealerHand);
+            if (!isRondeBezig) return;
 
-            string bericht = "Punten speler: " + scoreSpeler + "\r\nJouw punten: " + scoreDealer + "\r\n\r\n";
-
-            if (scoreSpeler > 21 || scoreDealer > scoreSpeler)
+            // Validatie: mag dealer passen? (Must Have)
+            if (BerekenScore(dealerHand) < 17)
             {
-                MessageBox.Show(bericht + "Je hebt gewonnen!");
-            }
-            else if (scoreSpeler > scoreDealer)
-            {
-                MessageBox.Show(bericht + "Helaas! Je hebt verloren.");
+                trainingScore -= 10;
+                MessageBox.Show("FOUT! Je moet trekken tot minimaal 17.");
             }
             else
             {
-                MessageBox.Show(bericht + "Gelijkspel!");
+                trainingScore += 5;
+                EindRonde("Je past.");
             }
-
-            StartNewGame();
         }
 
-        private void btnNew_Click(object sender, EventArgs e)
+        private void EindRonde(string reden)
         {
-            // hier wordt een nieuw spel gestart als je op de knop klikt
+            isRondeBezig = false;
+            ToonScherm(true);
+            int ps = BerekenScore(playerHand), ds = BerekenScore(dealerHand);
+            double winst = 100;
+
+            string resultaat = (ds > 21 || (ps <= 21 && ps > ds)) ? "Speler wint!" : (ds == ps ? "Gelijkspel!" : "Je hebt gewonnen!");
+
+            // Should Have: 3:2 uitbetaling bij Blackjack
+            if (resultaat == "Speler wint!" && ps == 21 && playerHand.Count == 2) winst = 150;
+
+            MessageBox.Show($"{reden}\n{resultaat}\nUitbetaling: {winst}");
             StartNewGame();
         }
+
+        private void btnNew_Click(object sender, EventArgs e) => StartNewGame();
     }
 }
