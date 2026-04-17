@@ -21,11 +21,9 @@ namespace Blackjack
             this.btnStand = new System.Windows.Forms.Button();
             this.btnNew = new System.Windows.Forms.Button();
 
-            // Form instellingen
-            this.Text = "Blackjack Dealer Trainer - Tim de Rijck";
+            this.Text = "Blackjack";
             this.ClientSize = new System.Drawing.Size(760, 440);
 
-            // Controls configureren via helper
             SetupPB(pbDealer1, 12, 12); SetupPB(pbDealer2, 122, 12);
             SetupPB(pbPlayer1, 12, 170); SetupPB(pbPlayer2, 122, 170);
 
@@ -36,7 +34,6 @@ namespace Blackjack
             btnStand.Text = "Stand"; btnStand.Bounds = new System.Drawing.Rectangle(260, 360, 240, 60);
             btnNew.Text = "New Game"; btnNew.Bounds = new System.Drawing.Rectangle(508, 360, 240, 60);
 
-            // Events koppelen
             btnHit.Click += btnHit_Click;
             btnStand.Click += btnStand_Click;
             btnNew.Click += btnNew_Click;

@@ -8,12 +8,13 @@ namespace Blackjack
         private List<Card> cards = new List<Card>();
         private Random rnd = new Random();
 
-        public Deck(int aantalDecks = 4) // Gebruikt nu 4 decks zoals in echte casino training
+        public Deck()
         {
+            // hier worden 4 decks aan de lijst toegevoegd (de shoe)
             string[] suits = { "hearts", "diamonds", "clubs", "spades" };
             string[] ranks = { "ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king" };
 
-            for (int i = 0; i < aantalDecks; i++)
+            for (int i = 0; i < 4; i++)
             {
                 foreach (string s in suits)
                 {
@@ -28,6 +29,7 @@ namespace Blackjack
 
         public void Shuffle()
         {
+            // hier worden de kaarten geschud
             for (int i = cards.Count - 1; i > 0; i--)
             {
                 int j = rnd.Next(i + 1);
@@ -39,6 +41,7 @@ namespace Blackjack
 
         public Card Draw()
         {
+            // hier wordt de bovenste kaart getrokken
             if (cards.Count == 0) return null;
             Card kaart = cards[0];
             cards.RemoveAt(0);

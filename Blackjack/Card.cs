@@ -10,7 +10,7 @@
         {
             Rank = rank;
             Value = value;
-            // Maakt automatisch de bestandsnaam: bijv. "ace_of_hearts.png"
+            // hier wordt de bestandsnaam samengesteld
             ImageFile = rank + "_of_" + suit + ".png";
         }
     }
